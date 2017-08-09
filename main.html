@@ -1,0 +1,113 @@
+<html>
+  <head>
+    <title> TMT Interactive Map Prototype </title>
+    <meta charset = "utf-8">
+    <link rel="stylesheet" href="css/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js" integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA==" crossorigin=""></script>
+  </head>
+
+  <body>
+    <div id="mapid" style="width: 100%; height: 100%; position: relative;">
+
+    </div>
+
+    <script>
+
+      var map = L.map('mapid').setView([45.00, -30.00], 2);
+
+      L.tileLayer('https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.light',
+        accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+      }).addTo(map);
+
+      /* var london = L.marker([51.5, -0.11]).addTo(map).bindPopup("London");
+      var tokyo = L.marker([35.69, 139.70]).addTo(map).bindPopup("Tokyo");
+      var paris = L.marker([48.86, 2.35]).addTo(map).bindPopup("Paris");
+      var honolulu = L.marker([21.31, -157.86]).addTo(map).bindPopup("Honolulu");
+      var ukraine = L.marker([48.38, 31.17]).addTo(map).bindPopup("Ukraine (Russia's second cousin)"); */
+
+      /**
+      * geoJSON used to transport data
+      */
+      var locations = [
+        {
+          "type": "Feature",  // type must be "Feature"
+          "properties": {
+            "name": "Hello darkness", // Name of location
+            "popupContent": "my old friend!",  // Abstract description of locaiton
+            "media": "https://cdn.drawception.com/images/panels/2015/5-24/ne18qFQLhw-1.png" // Media file attached to object
+          },
+          "geometry": {
+            "type": "Point",  // Type of marker
+            "coordinates": [-155.09, 19.7] // [Long, Lat] coordinates of location
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Los Angeles",
+            "popupContent": "City of Angels",
+            "media": "https://i.ytimg.com/vi/a_l61n_acTQ/hqdefault.jpg"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-118.24, 34.1]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Denver",
+            "popupContent": "Rocky Mountain Oysters",
+            "media": "http://i2.kym-cdn.com/photos/images/facebook/001/053/453/f5f.jpg"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-105, 39.7]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Austria",
+            "popupContent": "testing schtuff",
+            "media": "https://s-media-cache-ak0.pinimg.com/736x/ef/3f/61/ef3f617c27788445377fe036c6765c48--super-funny-guys.jpg"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [13.3, 47.3],
+          }
+        }
+      ];
+
+      /**
+      * Modifies individual geoJSON objects' popup content
+      * Useful in standardized formatting
+      */
+      function onEachFeature(feature, layer) {
+        var popupContent;
+
+        // Modify style of object properties
+        if (feature.properties && feature.properties.name) {
+          popupContent = "<p>" + feature.properties.name + "</p>";
+        }
+
+        // Location of uploaded image
+        popupContent += "<p><img src=" + feature.properties.media + " style=width:150px;height:auto></p>";
+
+        if (feature.properties && feature.properties.popupContent) {
+          popupContent += feature.properties.popupContent;
+        }
+
+        layer.bindPopup(popupContent);
+      }
+
+      L.geoJSON(locations, {
+        onEachFeature: onEachFeature
+      }).addTo(map);
+
+    </script>
+  </body>
+</html>
